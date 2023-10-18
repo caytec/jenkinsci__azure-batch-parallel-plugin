@@ -116,6 +116,9 @@ public class ZipHelper {
 
             while ((entry = zip.getNextEntry()) != null) {
                 File entryFile = new File(outputFolderPath, entry.getName());
+                if (!entryFile.toPath().normalize().startsWith(outputFolderPath)) {
+                    throw new IOException("Bad zip entry");
+                }
                 if (entry.isDirectory()) {
                     if (!entryFile.exists()) {
                         if (!entryFile.mkdirs()) {
